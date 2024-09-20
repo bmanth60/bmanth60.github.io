@@ -23,3 +23,20 @@ jobs:
           projectName: sos-main-site
           directory: src
           branch: main
+  aws:
+    runs-on: ubuntu-latest
+    permissions:
+      id-token: write # This is required for requesting the JWT
+      contents: read # This is required for actions/checkout
+    name: Publish to AWS S3
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Configure aws credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          aws-region: us-west-2
+          role-to-assume: ${{ secrets.AWS_ROLE_ARN }}
+      - name: Publish to AWS s3
+        run: |
+          aws s3 cp src s3://seaotterstudio-main-site/ --recursive
