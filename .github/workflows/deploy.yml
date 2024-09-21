@@ -32,11 +32,11 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
-      - name: Configure aws credentials
+      - name: Configure AWS Credentials
         uses: aws-actions/configure-aws-credentials@v4
         with:
           aws-region: us-west-2
           role-to-assume: ${{ secrets.AWS_ROLE_ARN }}
       - name: Publish to AWS s3
         run: |
-          aws s3 cp src s3://seaotterstudio-main-site/ --recursive
+          aws s3 cp --recursive --add-header="Cache-Control:max-age=3600" src s3://aws.seaotterstudio.com/
