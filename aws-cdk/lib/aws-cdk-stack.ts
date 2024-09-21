@@ -27,15 +27,15 @@ export class AwsCdkStack extends cdk.Stack {
 
     logsBucket.addToResourcePolicy(denyAll);
 
+    // Do not enforce SSL as that will require CloudFront
+    // We will have SSL termination at CloudFlare
     const siteBucket = new s3.Bucket(this, "SiteBucket", {
       bucketName,
       removalPolicy: cdk.RemovalPolicy.DESTROY,
       blockPublicAccess: s3.BlockPublicAccess.BLOCK_ACLS,
-      enforceSSL: true,
       websiteIndexDocument: "index.html",
       serverAccessLogsBucket: logsBucket,
       serverAccessLogsPrefix: "access-logs",
-      minimumTLSVersion: 1.2,
     });
 
     // Define policy to allow public read access
